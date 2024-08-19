@@ -1,0 +1,78 @@
+.main-div-todo {
+    height: 100dvh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(175, 65, 215, 0.775);
+}
+
+.sub-div-todo {
+    margin: 15px;
+    width: 100%;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    border: 3px solid white;
+}
+
+.todo-list-data {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.card-div-todo {
+    padding: 10px;
+    margin: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 7px;
+}
+
+.card-div-todo:hover {
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.column1 {
+    width: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.column2 {
+    width: 150px;
+    margin-left: 5px;
+}
+
+.column3 {
+    width: 100px;
+    margin-left: 5px;
+}
+
+.column4 {
+    width: 150px;
+    margin-left: 5px;
+}
+
+.input-task-name {
+    width: 90%;
+    background-color: transparent;
+    border: 1px solid transparent;
+    outline: none;
+    padding: 5px;
+}
+
+.input-task-name:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.475);
+}
+
+.color-dot {
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+    border-radius: 50%;
+    background-color: black;
+}
