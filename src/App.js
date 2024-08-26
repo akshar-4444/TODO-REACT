@@ -1,14 +1,81 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "./Todolist.css";
 
 const App = () => {
   const [taskData, setTaskData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [themColor, setThemeColor] = useState(localStorage.getItem("themeCOlor") ?? "#af42d7c6");
   const [taskFilter, setTaskFilter] = useState({
     taskName: "",
     status: "All",
   });
   const statusArray = ["New", "In Progress", "On Hold", "Completed"];
+
+  const cardStyles = {
+    padding: '10px',
+    margin: '10px 20px',
+    backgroundColor: 'white',
+    borderRadius: '7px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.5)",
+  };
+
+
+  const inputTaskName = {
+    width: "90%",
+    backgroundColor: "transparent",
+    border: "1px solid transparent",
+    outline: "none",
+    padding: "5px"
+  }
+
+  const colorDotStyle = {
+    width: "15px",
+    height: "15px",
+    marginLeft: "5px",
+    borderRadius: "50%",
+    backgroundColor: "black"
+  }
+
+  const buttonStyle = {
+    whiteSpace: "nowrap",
+    backgroundColor: "transparent",
+    borderRadius: "5px",
+    border: "1px solid black"
+  }
+
+  const column1Style = {
+    width: "400px",
+    display: "flex",
+    alignItems: "center"
+  }
+  const column2Style = {
+    width: "150px",
+    marginLeft: "5px"
+  }
+  const column3Style = {
+    width: "100px",
+    marginLeft: "5px"
+
+  }
+  const column4Style = {
+    width: "150px",
+    marginLeft: "5px"
+
+  }
+  const column5Style = {
+    width: "200px",
+    marginLeft: "5px"
+
+  }
+
+  const statusSelectStyle = {
+    borderRadius: "5px",
+    padding: '3px',
+    border: "1px solid black"
+  }
+
 
   const getTasksFromLocalStorage = () => {
     const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -76,13 +143,39 @@ const App = () => {
     return colors[status] || "black";
   };
 
+  const handleChangeTheme = (e) => {
+    setThemeColor(e.target.value)
+  }
+
+
   useEffect(() => {
     getTasks();
   }, [getTasks]);
 
+  useEffect(() => {
+    localStorage.setItem("themeCOlor", themColor)
+  }, [themColor]);
+
   return (
-    <div className="main-div-todo">
-      <div className="sub-div-todo">
+    <div
+      style={{
+        backgroundColor: themColor,
+        height: "100dvh",
+        width: "100dvw",
+        display: "flex",
+        justifyContent: "center"
+      }}
+    >
+      <div
+        style={{
+          margin: '15px',
+          width: '100%',
+          borderRadius: '5px',
+          display: 'flex',
+          flexDirection: 'column',
+          border: '3px solid white'
+        }}>
+
         {loading ? (
           <span
             style={{
@@ -97,28 +190,26 @@ const App = () => {
         ) : (
           <>
             <div
-              style={{
-                boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.5)",
-              }}
-              className="card-div-todo"
-            >
-              <span className="column1">
-                <span className="color-dot"></span>
+              style={cardStyles}>
+              <span style={column1Style}>
+                <span style={colorDotStyle}>
+
+                </span>
                 <input
                   onChange={handleChangeFilter}
                   name="taskName"
                   value={taskFilter.taskName}
                   placeholder="Search Task Name"
-                  className="input-task-name"
+                  style={inputTaskName}
                 />
               </span>
 
-              <span className="column2">
+              <span style={column2Style}>
                 <select
                   onChange={handleChangeFilter}
                   name="status"
                   value={taskFilter.status}
-                  style={{ borderRadius: "5px", padding: "3px", border: `1px solid black` }}
+                  style={statusSelectStyle}
                 >
                   <option value="All">All</option>
                   {statusArray.map((status) => (
@@ -129,28 +220,41 @@ const App = () => {
                 </select>
               </span>
 
-              <span className="column3">
+              <span style={column3Style}>
                 <button
                   title="Create Task"
                   onClick={handleCreateTask}
-                  style={{
-                    whiteSpace: "nowrap",
-                    backgroundColor: "transparent",
-                    borderRadius: "5px",
-                    border: `1px solid black`,
-                  }}
+                  style={buttonStyle}
                 >
                   Create
                 </button>
               </span>
 
-              <span className="column4">Created At</span>
+              <span style={column4Style}>Created At</span>
+              <span style={column5Style}>
+                Theme Color &nbsp;
+                <input
+                  value={themColor}
+                  onChange={(e) => handleChangeTheme(e)}
+                  type="color"
+                  style={{ cursor: "pointer" }} />
+                &nbsp;
+                <label title="Your data and theme color are saved only at the browser level. You will lose your data if you change browser"
+                  style={{ fontSize: "20px" }}>
+                  ⚠️
+                </label>
+              </span>
             </div>
-            <div className="todo-list-data">
+            <div style={{
+              display: "flex",
+              width: "100%",
+              flexDirection: "column",
+              overflow: "auto"
+            }}>
               {filteredTasks.length > 0 ? (
                 filteredTasks.map((task, index) => (
-                  <div className="card-div-todo" key={index}>
-                    <span className="column1">
+                  <div style={cardStyles} key={index}>
+                    <span style={column1Style}>
                       <span
                         style={{
                           backgroundColor: statusToDotColor(task.status),
@@ -159,21 +263,22 @@ const App = () => {
                           height: "15px",
                           width: "15px",
                         }}
-                      ></span>
+                      >
+                      </span>
                       <input
                         name="taskName"
                         onBlur={(e) => handleUpdateTask(e, index)}
                         onChange={(e) => handleUpdateTask(e, index)}
                         value={task.taskName}
-                        className="input-task-name"
+                        style={inputTaskName}
                       />
                     </span>
-                    <span className="column2">
+                    <span style={column2Style}>
                       <select
                         name="status"
                         onChange={(e) => handleUpdateTask(e, index)}
                         value={task.status}
-                        style={{ borderRadius: "5px", padding: "3px", border: `1px solid black` }}
+                        style={statusSelectStyle}
                       >
                         <option value="" disabled hidden>
                           Select
@@ -185,23 +290,19 @@ const App = () => {
                         ))}
                       </select>
                     </span>
-                    <span className="column3">
+                    <span style={column3Style}>
                       <button
-                        style={{
-                          whiteSpace: "nowrap",
-                          backgroundColor: "transparent",
-                          borderRadius: "5px",
-                          border: `1px solid black`,
-                        }}
                         title="Delete"
                         onClick={() => handleDeleteTask(index)}
+                        style={buttonStyle}
                       >
                         Delete
                       </button>
                     </span>
-                    <span className="column4">
+                    <span style={column4Style}>
                       {new Date(task.createdAt).toLocaleDateString()}
                     </span>
+                    <span style={column5Style}></span>
                   </div>
                 ))
               ) : (
@@ -216,7 +317,7 @@ const App = () => {
                 >
                   {taskFilter.taskName === "" && taskFilter.status === "All" ? (
                     <>
-                      Oops You don't have any task,&nbsp;
+                      Oops You don't have any task, &nbsp;
                       <button
                         onClick={handleCreateTask}
                         style={{
@@ -237,7 +338,7 @@ const App = () => {
           </>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 
